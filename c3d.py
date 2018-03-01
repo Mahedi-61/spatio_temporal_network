@@ -14,15 +14,11 @@ from keras.optimizers import SGD
 import os
 
 # set tensorflow log level
-os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 def get_c3d(weights_path):
     """ Return the Keras model of the network
         model is constructed for tensorflow
-
-        dim_ordering issue:
-        - 'th'-style dim_ordering: [batch, channels, depth, height, width]
-        - 'tf'-style dim_ordering: [batch, depth, height, width, channels]
     """
    
     input_shape=(16, 112, 112, 3) # l, h, w, c
@@ -274,17 +270,6 @@ def get_int_c3d(model, layer):
         return int_model
 
     return None
-
-
-
-"""
-if __name__ == '__main__':
-    model = get_c3d()
-    model.summary()
-    m = get_int_c3d(model, "fc8")
-"""
-
-
 
 
 

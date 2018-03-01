@@ -7,6 +7,7 @@ Description: train my c3d model for extracting spatio-temporal features
 
 # python packages
 import numpy as np
+import os
 from keras.optimizers import SGD
 from keras.utils import to_categorical
 
@@ -18,12 +19,13 @@ from . import config
 from . import img_preprocessing
 
 
-# path variable and constant 
+# path variable and constant
+
 nb_epochs = config.training_epochs
 batch_size = config.training_batch_size
 lr = config.learning_rate
 
-
+"""
 # preprocessing
 X_train, y_train = img_preprocessing.load_train_data()
 y_train = to_categorical(y_train, config.nb_classes)
@@ -36,7 +38,7 @@ X_valid, y_valid = img_preprocessing.load_validation_data()
 y_valid = to_categorical(y_valid, config.nb_classes)
 print("\nvalid data shape: ", X_valid.shape)
 print("valid label shape: ", len(y_valid))
-
+"""
 
 
 # constructing model
@@ -58,18 +60,18 @@ model.compile(optimizer = optimizers,
 
 
 # saving model json file
-model_utils.save_model(model)
+model_utils.save_conv_model(model)
 
 
 
 # training and evaluating 
 history = model_utils.LossHistory()
 early_stopping = model_utils.set_early_stopping()
-model_cp = model_utils.set_model_checkpoint()
+model_cp = model_utils.set_conv_model_checkpoint()
 reduce_lr = model_utils.set_reduce_lr()
 
 
-
+"""
 model.fit(X_train,
           y_train,
           batch_size = batch_size,
@@ -85,7 +87,7 @@ model.fit(X_train,
 #loss = history.losses
 #val_loss = history.val_losses
 # model_utils.show_loss_function(loss, val_loss, num_epochs)
-
+"""
 
 
 

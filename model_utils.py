@@ -23,58 +23,103 @@ from ... import root_dir
 from . import config
 
 
-
-# path variable and constant
-"""
-# ** For convenience of repeated experiment following rule is followed. 
-# ** trianed model is saved output directory 
-# ** But trained model is read from weights directory.
-# ** please copy and paste the model files in weights directory before reading
-"""
-
-output_dir = os.path.join(root_dir.stn_path(), "output")
-weights_dir = os.path.join(root_dir.stn_path(), "weights")
-
-train_model_name = "my_train_conv_model.json"
-train_model_weight = "my_train_conv_weight.h5"
+# all models are palced and stored in model directory
+# model checkpoint are saved in checkpoint directory
+# so final model should be replaced from checkpoint to model dir.
 
 
-
-# utilites function
-def save_model(model):
+# saving function
+def save_conv_model(model):
     print("saving model.....")
-    train_model_dir = os.path.join(output_dir, train_model_name)
     
     json_string = model.to_json()
-    open(train_model_dir, 'w').write(json_string)
+    open(config.train_conv_model_path, 'w').write(json_string)
 
 
 
-
-def read_model():
-    print("reading stored model architecture and weight")
-    train_model_dir = os.path.join(weights_dir, train_model_name)
-    train_model_weight_dir = os.path.join(weights_dir, train_model_weight)
+def save_conv_model_gallery(model):
+    print("saving model.....")
     
-    json_string = open(train_model_dir).read()
+    json_string = model.to_json()
+    open(config.train_conv_model_gallery_path, 'w').write(json_string)
+
+
+
+
+def set_conv_model_checkpoint():
+    
+    checkpoint_dir = os.path.join(root_dir.stn_path(), "checkpoint")
+    train_conv_model_weight_path = os.path.join(checkpoint_dir,
+                                   config.train_conv_model_weight)
+    
+    return ModelCheckpoint(train_conv_model_weight_path,
+                monitor = 'val_loss',
+                verbose = 2,
+                save_best_only = True,
+                save_weights_only = True,
+                mode = 'auto',
+                period = 5)
+
+
+
+def set_conv_model_gallery_checkpoint():
+    
+    checkpoint_dir = os.path.join(root_dir.stn_path(), "checkpoint")
+    train_conv_model_gallery_weight_path = os.path.join(checkpoint_dir,
+                            config.train_conv_model_gallery_weight)
+    
+    return ModelCheckpoint(train_conv_model_gallery_weight_path,
+                monitor = 'val_loss',
+                verbose = 2,
+                save_best_only = True,
+                save_weights_only = True,
+                mode = 'auto',
+                period = 5)
+
+
+
+
+
+
+
+# reading function
+def read_conv_model():
+    print("reading stored model architecture and weight ...")
+    
+    json_string = open(config.train_conv_model_path).read()
 
     model = model_from_json(json_string)
-    model.load_weights(train_model_weight_dir)
+    model.load_weights(config.train_conv_model_weight_path)
 
     return model
 
 
 
 
+def read_conv_model_gallery():
+    print("reading stored model architecture and weight ...")
+    
+    json_string = open(config.train_conv_model_gallery_path).read()
+
+    model = model_from_json(json_string)
+    model.load_weights(config.train_conv_model_gallery_weight_path)
+
+    return model
+
+
+
+# utilities funciton
 class LossHistory(Callback):
+    
     def on_train_begin(self, batch, logs = {}):
         self.losses = []
         self.val_losses = []
         
-
     def on_epoch_end(self, batch, logs = {}):
         self.losses.append(logs.get("loss"))
         self.val_losses.append(logs.get("val_loss"))
+
+
 
 
 
@@ -84,22 +129,6 @@ def set_early_stopping():
                                patience = config.early_stopping_patience,
                                mode = "auto",
                                verbose = 2)
-
-
-
-
-
-def set_model_checkpoint():
-    train_model_weight_dir = os.path.join(output_dir, train_model_weight)
-    
-    return ModelCheckpoint(train_model_weight_dir,
-                monitor = 'val_loss',
-                verbose = 2,
-                save_best_only = True,
-                save_weights_only = True,
-                mode = 'auto',
-                period = 5)
-
 
 
 
@@ -126,4 +155,3 @@ def show_loss_function(loss, val_loss, nb_epochs):
 
 
 
-    

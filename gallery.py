@@ -41,7 +41,7 @@ print("valid label shape: ", len(y_valid))
 
 
 # constructing model
-model = model_utils.read_model()
+model = model_utils.read_conv_model()
 
 
 optimizers = SGD(lr = lr,
@@ -60,13 +60,13 @@ model.compile(optimizer = optimizers,
 # training and evaluating 
 history = model_utils.LossHistory()
 early_stopping = model_utils.set_early_stopping()
-model_cp = model_utils.set_model_checkpoint()
+model_cp = model_utils.set_conv_model_gallery_checkpoint()
 reduce_lr = model_utils.set_reduce_lr()
 
 
 """
 # saving model json file
-model_utils.save_model(model)
+model_utils.save_conv_model_gallery(model)
 
 model.fit(X_train,
           y_train,

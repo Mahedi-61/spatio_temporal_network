@@ -106,7 +106,7 @@ probe_angle = ["angle_090", "angle_108", "angle_126", "angle_144", "angle_162", 
 
 
 # loading trained model
-model = model_utils.read_model()
+model = model_utils.read_conv_model()
 
 # predicting
 predict(model, subject_id_list, probe_angle, probe_type)

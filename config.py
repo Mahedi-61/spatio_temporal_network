@@ -5,6 +5,19 @@ File: config.py
 Description: this file contains configuration info
 """
 
+# python packages
+import os
+
+
+# project modules
+from ... import root_dir
+
+
+
+# path vairables and constant
+model_dir = os.path.join(root_dir.stn_path(), "model") 
+
+
 # video clip 
 clip_size = 16
 train_fpc = 8   # fpc: frame_per_clip
@@ -46,3 +59,44 @@ early_stopping_patience = 30
 
 
 # model testing configuration
+
+
+# model and their weights name
+c3d_weights_file = "c3d_weights_tf.h5"
+c3d_weights_path = os.path.join(model_dir, c3d_weights_file)
+
+
+train_conv_model = "train_conv_model.json"
+train_conv_model_path = os.path.join(model_dir, train_conv_model)
+
+train_conv_model_weight = "train_conv_model_weight.h5"
+train_conv_model_weight_path = os.path.join(model_dir, train_conv_model_weight)
+
+train_conv_model_gallery = "train_conv_model_gallery.json"
+train_conv_model_gallery_path = os.path.join(model_dir, train_conv_model_gallery)
+
+train_conv_model_gallery_weight = "train_conv__model_gallery_weight.h5"
+train_conv_model_gallery_weight_path = os.path.join(model_dir, train_conv_model_gallery_weight)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

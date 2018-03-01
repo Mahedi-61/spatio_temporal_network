@@ -6,7 +6,6 @@ Description: this file contains training model
 """
 
 # python packages
-import os
 from keras.models import Sequential, model_from_json
 from keras.models import load_model
 from keras.layers import (Flatten, Input, Dense, Dropout, AveragePooling2D)
@@ -14,26 +13,16 @@ from keras.layers import (Flatten, Input, Dense, Dropout, AveragePooling2D)
 # project modules
 from . import config
 from . import c3d
-from ... import root_dir
 
 
-# path vairables and constant
-model_dir = os.path.join(root_dir.stn_path(), "model") 
-output_dir = os.path.join(root_dir.stn_path(), "output")
-
-
-c3d_weights_file = "c3d_weights_tf.h5"
-c3d_weights_path = os.path.join(model_dir, c3d_weights_file)
-
+# path variables and constant
 nb_classes = config.nb_classes
 
 
-
-
-
+# finetuning pre-train c3d model
 def model_c3d():
     print("\nconstructing c3d model... ")
-    model = c3d.get_c3d(c3d_weights_path)
+    model = c3d.get_c3d(config.c3d_weights_path)
 
 
     # this model contains total 20 layer
@@ -57,6 +46,32 @@ def model_c3d():
     return my_model
     
 
+
+def model_conv_for_gallery():
+    pass
+
+
+
+
+    
 if __name__ == "__main__":
     model_c3d().summary()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
