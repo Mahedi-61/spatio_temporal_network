@@ -2,11 +2,12 @@
 Author : Md. Mahedi Hasan
 Project: spatio_temporal_features
 File: test.py
-Description: train my c3d model for extracting spatio-temporal features
+Description: test my conv_model_gallery for experimental format on caisaB dataet
 """
 
 # python packages
 import numpy as np
+import os
 from collections import Counter
 from keras.optimizers import SGD
 from keras.utils import to_categorical
@@ -14,16 +15,17 @@ from sklearn.metrics import accuracy_score
 from prettytable import PrettyTable
 
 
-# project files
+# project modules
 from . import my_models
 from . import model_utils
 from . import test_preprocessing
 from . import config
-
+from ... import root_dir
 
 
 # path variable and constant 
-batch_size = 4
+input_dir = os.path.join(root_dir.data_path(), "crop_img")
+batch_size = 12
 
 # display options
 table = PrettyTable(["angle", "accuracy"])
@@ -79,7 +81,7 @@ def predict(model, subject_id_list, probe_angle, probe_type):
             total_prob_score = np.sum(predictions, axis = 0)
             pred_sub_id = np.argmax(total_prob_score)
             
-            y_pred.append(pred_sub_id)
+            y_pred.append(pred_sub_id + 62)
 
             
 
@@ -94,19 +96,33 @@ def predict(model, subject_id_list, probe_angle, probe_type):
 
 
 
+
+
 ################# main work here #################
 print("\n#### test result of my gait recognition algorithm on CASIA Dataset-B ####")
 
 # test configuration
-subject_id_list = ["p001", "p002", "p003", "p004", "p005"]
+print("\nstart preprocessing test data")
 
-probe_type = "bag"
-probe_angle = ["angle_090", "angle_108", "angle_126", "angle_144", "angle_162", "angle_180"]
+# calculating total number of person having gait videos
+num_subject = len(os.listdir(input_dir))
+print("total number subjects:", num_subject)
+total_id_list = sorted(os.listdir(input_dir), key = lambda x: int(x[1:]))
+
+
+print("gallery subject id list: 63 to 124")
+subject_id_list = total_id_list[62:124]
+print(subject_id_list)
+
+
+probe_type = "coat"
+probe_angle = ["angle_000", "angle_018", "angle_036", "angle_054", "angle_072", 
+	"angle_090", "angle_108", "angle_126", "angle_144", "angle_162", "angle_180"]
 
 
 
 # loading trained model
-model = model_utils.read_conv_model()
+model = model_utils.read_conv_model_gallery()
 
 # predicting
 predict(model, subject_id_list, probe_angle, probe_type)
@@ -115,37 +131,6 @@ predict(model, subject_id_list, probe_angle, probe_type)
 print("\n\n############## Summary of my gait recognition algorithm ############## ")
 print("Probe set type:", probe_type)
 print(table)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

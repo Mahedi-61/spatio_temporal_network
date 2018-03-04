@@ -2,7 +2,7 @@
 Author : Md. Mahedi Hasan
 Project: spatio_temporal_features
 File: train.py
-Description: train my c3d model for extracting spatio-temporal features
+Description: train my conv model for extracting spatio-temporal features
 """
 
 # python packages
@@ -25,24 +25,26 @@ nb_epochs = config.training_epochs
 batch_size = config.training_batch_size
 lr = config.learning_rate
 
-"""
+
 # preprocessing
-X_train, y_train = img_preprocessing.load_train_data()
+X_train, y_train = img_preprocessing.load_train_data("train")
 y_train = to_categorical(y_train, config.nb_classes)
 print("\ntrian data shape: ", X_train.shape)
 print("train label shape: ", len(y_train))
 
 
 
-X_valid, y_valid = img_preprocessing.load_validation_data()
+X_valid, y_valid = img_preprocessing.load_train_data("valid")
 y_valid = to_categorical(y_valid, config.nb_classes)
 print("\nvalid data shape: ", X_valid.shape)
 print("valid label shape: ", len(y_valid))
-"""
 
 
-# constructing model
-model = my_models.model_c3d()
+# constructing new model
+model = my_models.model_conv()
+
+# train once again
+#model = model_utils.read_conv_model()
 
 
 optimizers = SGD(lr = lr,
@@ -60,7 +62,7 @@ model.compile(optimizer = optimizers,
 
 
 # saving model json file
-model_utils.save_conv_model(model)
+# model_utils.save_conv_model(model)
 
 
 
@@ -71,7 +73,7 @@ model_cp = model_utils.set_conv_model_checkpoint()
 reduce_lr = model_utils.set_reduce_lr()
 
 
-"""
+
 model.fit(X_train,
           y_train,
           batch_size = batch_size,
@@ -87,27 +89,6 @@ model.fit(X_train,
 #loss = history.losses
 #val_loss = history.val_losses
 # model_utils.show_loss_function(loss, val_loss, num_epochs)
-"""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

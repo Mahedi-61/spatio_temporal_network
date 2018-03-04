@@ -47,10 +47,9 @@ def save_conv_model_gallery(model):
 
 
 def set_conv_model_checkpoint():
-    
-    checkpoint_dir = os.path.join(root_dir.stn_path(), "checkpoint")
-    train_conv_model_weight_path = os.path.join(checkpoint_dir,
-                                   config.train_conv_model_weight)
+
+    train_conv_model_weight_path = os.path.join(config.checkpoint_dir,
+                                        config.train_conv_model_weight)
     
     return ModelCheckpoint(train_conv_model_weight_path,
                 monitor = 'val_loss',
@@ -63,9 +62,8 @@ def set_conv_model_checkpoint():
 
 
 def set_conv_model_gallery_checkpoint():
-    
-    checkpoint_dir = os.path.join(root_dir.stn_path(), "checkpoint")
-    train_conv_model_gallery_weight_path = os.path.join(checkpoint_dir,
+
+    train_conv_model_gallery_weight_path = os.path.join(config.checkpoint_dir,
                             config.train_conv_model_gallery_weight)
     
     return ModelCheckpoint(train_conv_model_gallery_weight_path,
@@ -74,9 +72,7 @@ def set_conv_model_gallery_checkpoint():
                 save_best_only = True,
                 save_weights_only = True,
                 mode = 'auto',
-                period = 5)
-
-
+                period = 0)
 
 
 
@@ -84,7 +80,7 @@ def set_conv_model_gallery_checkpoint():
 
 # reading function
 def read_conv_model():
-    print("reading stored model architecture and weight ...")
+    print("reading stored conv_model architecture and weight ...")
     
     json_string = open(config.train_conv_model_path).read()
 
@@ -97,7 +93,7 @@ def read_conv_model():
 
 
 def read_conv_model_gallery():
-    print("reading stored model architecture and weight ...")
+    print("reading stored conv_model_gallery architecture and weight ...")
     
     json_string = open(config.train_conv_model_gallery_path).read()
 

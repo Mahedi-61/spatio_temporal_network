@@ -101,7 +101,8 @@ def get_data_from_images(images):
 # process images for gait recognition
 def process_test_images(subject_id,
                         probe_angle,
-                        probe_seq):
+                        probe_seq,
+                        start_id = 63):
 
 
     #images and labels
@@ -133,7 +134,7 @@ def process_test_images(subject_id,
                 X_images.append(input_img_dir[b_id : e_id])
 
                 # label start from 0
-                y_labels.append(int(subject_id[1:]) - 1)
+                y_labels.append(int(subject_id[1:]) - start_id)
 
 
     print("test data of:: subject: %s, angel: %s, sequence: %s" %
