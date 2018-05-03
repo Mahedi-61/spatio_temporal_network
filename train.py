@@ -1,9 +1,4 @@
-"""
-Author : Md. Mahedi Hasan
-Project: spatio_temporal_features
-File: train.py
-Description: train my conv model for extracting spatio-temporal features
-"""
+"""train my conv model for extracting spatio-temporal features"""
 
 # python packages
 import numpy as np
@@ -12,62 +7,61 @@ from keras.optimizers import SGD
 from keras.utils import to_categorical
 
 
-# project files
+# project modules
 from . import my_models
 from . import model_utils
 from . import config
 from . import img_preprocessing
 
 
-# path variable and constant
 
+# path variable and constant
 nb_epochs = config.training_epochs
 batch_size = config.training_batch_size
 lr = config.learning_rate
 
 
+
 # preprocessing
-X_train, y_train = img_preprocessing.load_train_data("train")
+X_train, y_train = img_preprocessing.load_data("train")
 y_train = to_categorical(y_train, config.nb_classes)
 print("\ntrian data shape: ", X_train.shape)
 print("train label shape: ", len(y_train))
 
 
 
-X_valid, y_valid = img_preprocessing.load_train_data("valid")
+X_valid, y_valid = img_preprocessing.load_data("valid")
 y_valid = to_categorical(y_valid, config.nb_classes)
 print("\nvalid data shape: ", X_valid.shape)
 print("valid label shape: ", len(y_valid))
 
 
+
 # constructing new model
-model = my_models.model_conv()
+#model = my_models.model_conv()
 
 # train once again
-#model = model_utils.read_conv_model()
-
+model = model_utils.read_conv_model()
 
 optimizers = SGD(lr = lr,
-                  momentum = 0.9,
+                  momentum = 0.92,
                   nesterov = True)
 
 
 
-objective = "mean_squared_error"
+objective = "categorical_crossentropy"
 model.compile(optimizer = optimizers,
               loss =     objective,
               metrics = ['accuracy'])
 
 
-
-
 # saving model json file
-# model_utils.save_conv_model(model)
+model_utils.save_conv_model(model)
 
 
 
 # training and evaluating 
-history = model_utils.LossHistory()
+#history = model_utils.LossHistory()
 early_stopping = model_utils.set_early_stopping()
 model_cp = model_utils.set_conv_model_checkpoint()
 reduce_lr = model_utils.set_reduce_lr()

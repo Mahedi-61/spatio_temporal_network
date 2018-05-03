@@ -1,9 +1,4 @@
-"""
-Author : Md. Mahedi Hasan
-Project: spatio_temporal_network
-File: test_preprocessing
-Description: this file is for test image preprocessing
-"""
+""" this file is for test image preprocessing"""
 
 
 # python packages
@@ -21,9 +16,8 @@ from . import config
 
 
 # path variables and constant
-input_dir = os.path.join(root_dir.data_path(), "crop_img")
-output_dir =  os.path.join(root_dir.stn_path(), "output")
-casia_mean_cube_file_dir = os.path.join(output_dir, "casia_mean_cube.npy")
+input_dir = config.crop_img_dir
+casia_mean_cube_file_dir = config.casia_mean_cube_file_path
 
 img_size = config.img_size
 img_channel = config.img_channel
@@ -134,10 +128,12 @@ def process_test_images(subject_id,
                 X_images.append(input_img_dir[b_id : e_id])
 
                 # label start from 0
-                y_labels.append(int(subject_id[1:]) - start_id)
+                # for person identification using c3d
+                #y_labels.append(int(subject_id[1:]) - start_id)
+                y_labels.append(config.angle_list.index(probe_angle))
 
 
-    print("test data of:: subject: %s, angel: %s, sequence: %s" %
+    print("subject: %s, angel: %s, sequence: %s" %
                               (subject_id, probe_angle, probe_seq))
     
     print("total video clip to predict: " , total_clip_for_each_sub)
@@ -172,7 +168,8 @@ def load_test_data(subject_id_list,  probe_seq, probe_angle):
 
 
 if __name__ == '__main__':
-    load_test_data("p002", "angle_000", ["nm05", "nm06"])
+    x, y = load_test_data("p002", "angle_000", ["nm05", "nm06"])
+    print(y)
 
 
 

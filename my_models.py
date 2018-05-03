@@ -1,14 +1,9 @@
-"""
-Author : Md. Mahedi Hasan
-Project: spatio_temporal_network
-File : my_models.py
-Description: this file contains training model
-"""
+"""this file contains my spatio_temporal_model based on c3d"""
 
 # python packages
 from keras.models import Sequential, Model, model_from_json
 from keras.models import load_model
-from keras.layers import (Flatten, Input, Dense, Dropout, AveragePooling2D)
+from keras.layers import (Flatten, Dense, Dropout)
 
 # project modules
 from . import config
@@ -35,12 +30,14 @@ def model_conv():
 
     # adding my own layers for gait recognition problem
     my_model.add(Flatten())
-    
+
+    """
     # FC layers group
     my_model.add(Dense(2048, activation='relu', name='fc6'))
     my_model.add(Dropout(.5))
+    """
     
-    my_model.add(Dense(512, activation='relu', name='fc7'))
+    my_model.add(Dense(128, activation='relu', name='fc6'))
     my_model.add(Dropout(.5))
     
     my_model.add(Dense(nb_classes, activation='softmax', name='softmax_layer'))
@@ -48,7 +45,8 @@ def model_conv():
     
 
 
-def model_conv_for_gallery():
+
+def model_conv_gallery():
 
     """
     base_model = model_utils.read_conv_model()

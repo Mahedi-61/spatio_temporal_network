@@ -1,9 +1,4 @@
-"""
-Author : Md. Mahedi Hasan
-Project: spatio_temporal_network
-File: config.py
-Description: this file contains configuration info
-"""
+"""configuration info for spatio_temporal_network"""
 
 # python packages
 import os
@@ -18,14 +13,18 @@ from ... import root_dir
 model_dir = os.path.join(root_dir.stn_path(), "model") 
 checkpoint_dir = os.path.join(root_dir.stn_path(), "checkpoint")
 output_dir =  os.path.join(root_dir.stn_path(), "output")
+crop_img_dir = os.path.join(root_dir.data_path(), "crop_img")
 
 # mean cube file over casia 124 subjects
 casia_mean_cube_file_path = os.path.join(output_dir, "casia_mean_cube.npy")
 
+
 # video clip 
 clip_size = 16
 train_fpc = 8   # fpc: frame_per_clip
-
+angle_list = ["angle_000", "angle_018", "angle_036", "angle_054",
+              "angle_072", "angle_090", "angle_108", "angle_126",
+              "angle_144", "angle_162", "angle_180"]
 
 
 # image and input shape to the model
@@ -34,20 +33,22 @@ img_channel = 3
 img_shape = (img_size, img_size, img_channel)
 
 input_shape = (clip_size, img_size, img_size, img_channel)
-nb_classes = 62
+nb_classes = 11
 
 
 
 # train and validation sequence
-ls_train_seq = ["bg01", "bg02", "cl01", "cl02" , "nm01", "nm02", "nm03", "nm04"]
+ls_train_seq = ["nm01", "nm02", "nm03", "nm04"]
 ls_valid_seq = ["nm05", "nm06"]
 
-ls_gallery_train_seq =  ["nm01", "nm02", "nm03", "nm04", "nm05", "nm06"]
-ls_gallery_valid_seq =  ["bg01", "bg02"]
+
+#ls_gallery_train_seq =  ["nm01", "nm02", "nm03", "nm04"]
+#ls_gallery_valid_seq =  ["bg01", "bg02"]
 
 
 # test video clip
-test_fpc = 4
+test_fpc = 8
+testing_batch_size = 12
 
 
 # network training parameter
@@ -58,11 +59,8 @@ training_epochs = 40
 
 # model utilites
 lr_reduce_factor = 0.5
-lr_reduce_patience = 15
-early_stopping_patience = 30
-
-
-# model testing configuration
+lr_reduce_patience = 5
+early_stopping_patience = 10
 
 
 # model and their weights name
@@ -70,17 +68,17 @@ c3d_weights_file = "c3d_weights_tf.h5"
 c3d_weights_path = os.path.join(model_dir, c3d_weights_file)
 
 
-train_conv_model = "train_conv_model.json"
-train_conv_model_path = os.path.join(model_dir, train_conv_model)
+conv_model = "conv_model.json"
+conv_model_path = os.path.join(model_dir, conv_model)
 
-train_conv_model_weight = "train_conv_model_weight.h5"
-train_conv_model_weight_path = os.path.join(model_dir, train_conv_model_weight)
+conv_model_weight = "conv_model_weight.h5"
+conv_model_weight_path = os.path.join(model_dir, conv_model_weight)
 
-train_conv_model_gallery = "train_conv_model_gallery.json"
-train_conv_model_gallery_path = os.path.join(model_dir, train_conv_model_gallery)
+#conv_model_gallery = "conv_model_gallery.json"
+#conv_model_gallery_path = os.path.join(model_dir, conv_model_gallery)
 
-train_conv_model_gallery_weight = "train_conv_model_gallery_weight.h5"
-train_conv_model_gallery_weight_path = os.path.join(model_dir, train_conv_model_gallery_weight)
+#conv_model_gallery_weight = "conv_model_gallery_weight.h5"
+#conv_model_gallery_weight_path = os.path.join(model_dir, conv_model_gallery_weight)
 
 
 

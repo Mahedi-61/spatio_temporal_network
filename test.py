@@ -1,9 +1,4 @@
-"""
-Author : Md. Mahedi Hasan
-Project: spatio_temporal_features
-File: test.py
-Description: test my conv_model_gallery for experimental format on caisaB dataet
-"""
+""" test my conv_model_gallery for experimental format on Caisa-B Dataset"""
 
 # python packages
 import numpy as np
@@ -24,8 +19,8 @@ from ... import root_dir
 
 
 # path variable and constant 
-input_dir = os.path.join(root_dir.data_path(), "crop_img")
-batch_size = 12
+input_dir = config.crop_img_dir
+
 
 # display options
 table = PrettyTable(["angle", "accuracy"])
@@ -55,7 +50,7 @@ def predict(model, subject_id_list, probe_angle, probe_type):
     elif(probe_type == "coat"): probe_seq = ["cl01", "cl02"]
     
     # looping for all probe view angle
-    for p_angle in probe_angle:
+    for angle_nb, p_angle in enumerate(probe_angle):
         
         print("\n\npredicting probe set type:", probe_type, ",  angle :", p_angle, " ...")
         row = [p_angle]
@@ -68,22 +63,26 @@ def predict(model, subject_id_list, probe_angle, probe_type):
                                                                p_angle,
                                                                probe_seq)
 
-            y_true.append(int(subject_id[1:]) - 1)
+            # for person identification
+            #y_true.append(int(subject_id[1:]) - 1)
+            # for angle classification
+            y_true.append(angle_nb)
             y_test = to_categorical(y_test, config.nb_classes)
 
-
+            
             # predicting two videos each...
             print("predicting ...")
-            predictions = model.predict(X_test,  batch_size, verbose = 2)
-            
+            predictions = model.predict(X_test,
+                                        config.testing_batch_size,
+                                        verbose = 2)
+
 
             # getting total probabilty score for each probe set
             total_prob_score = np.sum(predictions, axis = 0)
-            pred_sub_id = np.argmax(total_prob_score)
-            
-            y_pred.append(pred_sub_id + 62)
+            pred_angle_id = np.argmax(total_prob_score)
 
-            
+            y_pred.append(pred_angle_id)
+
 
         print("\ntrue label: ", y_true)
         print("precited label ", y_pred)
@@ -93,6 +92,7 @@ def predict(model, subject_id_list, probe_angle, probe_type):
 
         row.append(acc_score * 100)
         table.add_row(row)
+	
 
 
 
@@ -115,14 +115,13 @@ subject_id_list = total_id_list[62:124]
 print(subject_id_list)
 
 
-probe_type = "coat"
-probe_angle = ["angle_000", "angle_018", "angle_036", "angle_054", "angle_072", 
-	"angle_090", "angle_108", "angle_126", "angle_144", "angle_162", "angle_180"]
+probe_type = "normal"
+probe_angle = config.angle_list
 
 
 
 # loading trained model
-model = model_utils.read_conv_model_gallery()
+model = model_utils.read_conv_model()
 
 # predicting
 predict(model, subject_id_list, probe_angle, probe_type)
@@ -131,11 +130,6 @@ predict(model, subject_id_list, probe_angle, probe_type)
 print("\n\n############## Summary of my gait recognition algorithm ############## ")
 print("Probe set type:", probe_type)
 print(table)
-
-
-
-
-
 
 
 

@@ -1,9 +1,4 @@
-"""
-Author : Md. Mahedi Hasan
-Project: spatio_temporal_features
-File: gallery.py
-Description: train my model_conv_gallery model for casia-B gallery set
-"""
+"""train my model_conv_gallery model for casia-B gallery_set"""
 
 # python packages
 import numpy as np
@@ -42,7 +37,7 @@ print("valid label shape: ", len(y_valid))
 
 
 # constructing model
-#model = my_models.model_conv_for_gallery()
+#model = my_models.model_conv_gallery()
 model = model_utils.read_conv_model_gallery()
 
 optimizers = SGD(lr = lr,
@@ -59,7 +54,7 @@ model.compile(optimizer = optimizers,
 
 
 # training and evaluating 
-history = model_utils.LossHistory()
+#history = model_utils.LossHistory()
 early_stopping = model_utils.set_early_stopping()
 model_cp = model_utils.set_conv_model_gallery_checkpoint()
 reduce_lr = model_utils.set_reduce_lr()

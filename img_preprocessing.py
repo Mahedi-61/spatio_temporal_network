@@ -1,9 +1,4 @@
-"""
-Author : Md. Mahedi Hasan
-Project: spatio_temporal_network
-File: img_preprocessing
-Description: this file is for image preprocessing
-"""
+"""this file is for image preprocessing for my spatio_temporal model"""
 
 # python packages
 import numpy as np
@@ -20,7 +15,7 @@ from . import config
 
 
 # path variables and constant
-input_dir = os.path.join(root_dir.data_path(), "crop_img")
+input_dir = config.crop_img_dir
 
 
 img_size = config.img_size
@@ -36,10 +31,9 @@ divisor = (clip_size // train_fpc)
 
 
 
-    
 # methods for preprocessing
 def resize_image(img, size):
-    #Pillow return images size as (w, h)
+    # pillow return images size as (w, h)
     width, height = img.size 
 
     if(width > height):
@@ -125,7 +119,7 @@ def process_images(subject_id_list,
         print("\n\n%s subject have: %d angle gait vidoes" % (subject_id, num_angle))
         
         # considering each angle
-        for angle in angle_list:
+        for angle_nb, angle in enumerate(angle_list):
             subject_angle_dir = os.path.join(subject_dir, angle)
 
             # considering each gait sequence
@@ -145,10 +139,13 @@ def process_images(subject_id_list,
                         e_id = clip_size + (i * train_fpc)
                         
                         X_images.append(input_img_dir[b_id : e_id])
-                        y_labels.append(int(subject_id[1:]) - start_id)
+                        # for person identification using c3d
+                        # y_labels.append(int(subject_id[1:]) - start_id)
+                        # for angle classification
+                        y_labels.append(angle_nb)
 
         print("%s subject has total %d clip for %s" %(subject_id,
-                                                      total_clip_for_each_sub, walking_seq))
+                            total_clip_for_each_sub, walking_seq))
 
     return X_images, y_labels
 
@@ -157,8 +154,8 @@ def process_images(subject_id_list,
 
 
 
-# methods for train set data loading
-def load_train_data(data_type):
+# method for loading training and validation data
+def load_data(data_type):
     print("\nstart preprocessing %s data" % data_type)
 
     # calculating total number of person having gait videos
@@ -167,21 +164,21 @@ def load_train_data(data_type):
 
     total_id_list = sorted(os.listdir(input_dir), key = lambda x: int(x[1:]))
 
-    print("train subject id list: 1 to 62")
-    subject_id_list = total_id_list[:62]
+    print("train subject id list: 63 to 124")
+    subject_id_list = total_id_list[62:124]
 
 
     # getting all training images and labels
     if(data_type == "train"):
         X_images, y_labels = process_images(subject_id_list,
                                             config.ls_train_seq,
-                                            start_id = 1)
+                                            start_id = 62)
 
-    # getting all training images and labels
+    # getting all validation images and labels
     elif(data_type == "valid"):
         X_images, y_labels = process_images(subject_id_list,
                                             config.ls_valid_seq,
-                                            start_id = 1)
+                                            start_id = 62)
 
 
     # converting raw images to numpy array
@@ -199,8 +196,7 @@ def load_train_data(data_type):
 
 
 
-
-
+"""
 # methods for gallery set data loading
 def load_gallery_data(data_type):
     print("\nstart preprocessing %s data" % data_type)
@@ -239,7 +235,7 @@ def load_gallery_data(data_type):
     
     return X_data, y_labels  
 
-
+"""
 
 
 
@@ -313,7 +309,9 @@ def make_casia_dataset_mean():
 
 
 if __name__ == '__main__':
-    make_casia_dataset_mean()
+    #make_casia_dataset_mean()
+    d, l = load_data("valid")
+    print("l: ", l[:250])
 
 
 

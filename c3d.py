@@ -1,9 +1,4 @@
-"""
-Author:
-Project : spatio_temporal_network
-File c3d.py
-Description: slightly modified c3d algorithm for gait recognition
-"""
+"""slightly modified c3d algorithm for gait recognition"""
 
 # python packages
 from keras.models import Sequential

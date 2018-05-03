@@ -1,10 +1,9 @@
+"""this file contains code for handling conv model"""
 """
-Author     : Md. Mahedi Hasan
-Project    : spatio_temporal_network
-File : model_utils.py
-Description: this file contains code for handling model
+# all models are palced and stored in model directory
+# model checkpoint are saved in checkpoint directory
+# so final model should be replaced from checkpoint to model dir.
 """
-
 
 # python packages
 import numpy as np
@@ -23,9 +22,6 @@ from ... import root_dir
 from . import config
 
 
-# all models are palced and stored in model directory
-# model checkpoint are saved in checkpoint directory
-# so final model should be replaced from checkpoint to model dir.
 
 
 # saving function
@@ -33,40 +29,39 @@ def save_conv_model(model):
     print("saving model.....")
     
     json_string = model.to_json()
-    open(config.train_conv_model_path, 'w').write(json_string)
-
-
-
-def save_conv_model_gallery(model):
-    print("saving model.....")
-    
-    json_string = model.to_json()
-    open(config.train_conv_model_gallery_path, 'w').write(json_string)
-
+    open(config.conv_model_path, 'w').write(json_string)
 
 
 
 def set_conv_model_checkpoint():
 
-    train_conv_model_weight_path = os.path.join(config.checkpoint_dir,
-                                        config.train_conv_model_weight)
+    conv_model_weight_path = os.path.join(config.checkpoint_dir,
+                                        config.conv_model_weight)
     
-    return ModelCheckpoint(train_conv_model_weight_path,
+    return ModelCheckpoint(conv_model_weight_path,
                 monitor = 'val_loss',
                 verbose = 2,
                 save_best_only = True,
                 save_weights_only = True,
                 mode = 'auto',
-                period = 5)
+                period = 1)
 
 
+"""
+def save_conv_model_gallery(model):
+    print("saving model.....")
+    
+    json_string = model.to_json()
+    open(config.conv_model_gallery_path, 'w').write(json_string)
 
+
+    
 def set_conv_model_gallery_checkpoint():
 
-    train_conv_model_gallery_weight_path = os.path.join(config.checkpoint_dir,
-                            config.train_conv_model_gallery_weight)
+    conv_model_gallery_weight_path = os.path.join(config.checkpoint_dir,
+                            config.conv_model_gallery_weight)
     
-    return ModelCheckpoint(train_conv_model_gallery_weight_path,
+    return ModelCheckpoint(conv_model_gallery_weight_path,
                 monitor = 'val_loss',
                 verbose = 2,
                 save_best_only = True,
@@ -76,29 +71,28 @@ def set_conv_model_gallery_checkpoint():
 
 
 
+def read_conv_model_gallery():
+    print("reading stored conv_model_gallery architecture and weight ...")
+    
+    json_string = open(config.conv_model_gallery_path).read()
+
+    model = model_from_json(json_string)
+    model.load_weights(config.conv_model_gallery_weight_path)
+
+    return model
+
+"""
+
 
 
 # reading function
 def read_conv_model():
     print("reading stored conv_model architecture and weight ...")
     
-    json_string = open(config.train_conv_model_path).read()
+    json_string = open(config.conv_model_path).read()
 
     model = model_from_json(json_string)
-    model.load_weights(config.train_conv_model_weight_path)
-
-    return model
-
-
-
-
-def read_conv_model_gallery():
-    print("reading stored conv_model_gallery architecture and weight ...")
-    
-    json_string = open(config.train_conv_model_gallery_path).read()
-
-    model = model_from_json(json_string)
-    model.load_weights(config.train_conv_model_gallery_weight_path)
+    model.load_weights(config.conv_model_weight_path)
 
     return model
 
